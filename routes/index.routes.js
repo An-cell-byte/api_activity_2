@@ -11,6 +11,8 @@ import {
 
 import { login } from "../controllers/login.controllers.js";
 
+import { validateJWT } from "../utils/jwt.js";
+
 const router = Router()
 
 // INITIAL ROUTES
@@ -19,11 +21,11 @@ router.get("/ping",name_two)
 router.get("/oso", name_three)
 
 // USERS CRUD
-router.post("/users", createUser);
-router.get("/users", getUsers);
-router.get("/users/:id", getUser);
-router.put("/users/:id", updateUser);
-router.delete("/users/:id", deleteUser);
+router.post("/users", validateJWT, createUser);
+router.get("/users", validateJWT, getUsers);
+router.get("/users/:id", validateJWT, getUser);
+router.put("/users/:id", validateJWT,updateUser);
+router.delete("/users/:id", validateJWT,deleteUser);
 
 // LOGIN
 router.post("/login", login);

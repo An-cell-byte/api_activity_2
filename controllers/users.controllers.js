@@ -1,7 +1,17 @@
 import User from "../models/User.js";
+import { getSalt, hash } from "../utils/hash.js";
 
 // CREATE
 export const createUser = async (req, res) => {
+  if (req.body.email) {
+    req.body.email = req.body.email.trim().toLowerCase();
+  }
+
+  if (req.body.password) {
+    const salt = getSalt();
+    req.body.password = `${salt}:${hash(req.body.password, salt)}`;
+  }
+
   const user = new User(req.body);
   const saved = await user.save();
   res.json(saved);
@@ -9,7 +19,7 @@ export const createUser = async (req, res) => {
 
 // READ ALL USERS
 export const getUsers = async (req, res) => {
-  const users = await User.find();
+  const users = await User.find().select("-password");
   res.json(users);
 };
 
@@ -21,6 +31,15 @@ export const getUser = async (req, res) => {
 
 // UPDATE
 export const updateUser = async (req, res) => {
+  if (req.body.email) {
+    req.body.email = req.body.email.trim().toLowerCase();
+  }
+
+  if (req.body.password) {
+    const salt = getSalt();
+    req.body.password = `${salt}:${hash(req.body.password, salt)}`;
+  }
+
   const user = await User.findByIdAndUpdate(
     req.params.id,
     req.body,
