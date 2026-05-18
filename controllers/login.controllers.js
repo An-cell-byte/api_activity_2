@@ -22,6 +22,8 @@ export const login = async (req, res) => {
   }
 
   const token = jwt.sign({sub:user._id}, process.env.JWT, {expiresIn:"1h"})
+  
+  console.log("Token generado:", token)
 
   res.json({ message: "Login exitoso", user, token });
 };

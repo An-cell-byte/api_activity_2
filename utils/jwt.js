@@ -16,6 +16,7 @@ validateJWT.use((req,res,next)=>{
         if(e){
             res.status(401).json({msg:e.message})
         } else{
+            console.log("Token válido:", decoded)
             req.decoded = decoded
             next()
         }
